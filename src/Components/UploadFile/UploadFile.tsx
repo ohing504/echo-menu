@@ -1,7 +1,9 @@
+import { UploadTaskSnapshot } from "@firebase/storage-types";
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 
+import { storage } from "../../shared/firebase/firebase";
 import PreviewCard from "./PreviewCard";
 
 @observer
@@ -10,7 +12,13 @@ class UploadFile extends React.Component {
   private file: any;
 
   @observable
-  private preview: any;
+  private preview: string;
+
+  @observable
+  private completed: number = 0;
+
+  @observable
+  private isUploading: boolean = false;
 
   public render() {
     return (
@@ -22,7 +30,15 @@ class UploadFile extends React.Component {
           onChange={this.handleFiles}
         />
 
-        {this.file && <PreviewCard preview={this.preview} file={this.file} />}
+        {this.file && (
+          <PreviewCard
+            preview={this.preview}
+            file={this.file}
+            onSubmit={this.handleUpload}
+          />
+        )}
+
+        {this.isUploading && <p>{this.completed} %</p>}
       </div>
     );
   }
@@ -31,16 +47,39 @@ class UploadFile extends React.Component {
   private revoke = () => URL.revokeObjectURL(this.preview);
 
   @action
-  private handleFiles = (e: any) => {
-    if (this.file === e.target.files[0]) {
-      return;
-    }
-
-    if (e.target.files[0]) {
-      this.file = e.target.files[0];
+  private handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      this.file = event.target.files[0];
       this.revoke();
       this.preview = URL.createObjectURL(this.file);
     }
+  };
+
+  @action
+  private handleUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (!this.file) {
+      return;
+    }
+
+    this.isUploading = true;
+    this.completed = 0;
+
+    const fileRef = storage.ref("menus").child("menu.jpg");
+    const uploadTask = fileRef.put(this.file);
+    uploadTask.on("state_changed", this.handleUploadProgress);
+  };
+
+  @action
+  private handleUploadProgress = (snapshot: UploadTaskSnapshot) => {
+    this.completed = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    if (snapshot.bytesTransferred === snapshot.totalBytes) {
+      this.handleUploadCompleted();
+    }
+  };
+
+  @action
+  private handleUploadCompleted = () => {
+    this.isUploading = false;
   };
 }
 

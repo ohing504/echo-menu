@@ -2,14 +2,15 @@ import * as React from "react";
 
 import * as util from "../../shared/utils";
 
+type IOnSubmit = (event: React.MouseEvent<HTMLButtonElement>) => void;
+
 interface IPreviewCard {
   preview: string;
-  file: {
-    name: string;
-    size: number;
-  };
+  file: { name: string; size: number };
+  onSubmit: IOnSubmit;
 }
-const PreviewCard = ({ preview, file }: IPreviewCard) => (
+
+const PreviewCard = ({ preview, file, onSubmit }: IPreviewCard) => (
   <div>
     <div>
       <img src={preview} title={file.name} />
@@ -19,7 +20,7 @@ const PreviewCard = ({ preview, file }: IPreviewCard) => (
       </div>
 
       <div>
-        <button color="primary">Upload</button>
+        <button onClick={onSubmit}>Upload</button>
       </div>
     </div>
   </div>
