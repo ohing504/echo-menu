@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import * as React from "react";
 
 import { storage } from "../../shared/firebase/firebase";
+import * as utils from "../../shared/utils";
 import PreviewCard from "./PreviewCard";
 
 @observer
@@ -23,6 +24,8 @@ class UploadFile extends React.Component {
   public render() {
     return (
       <div>
+        <h3>데이터가 없습니다...</h3>
+
         <input
           accept="image/*"
           id="flat-button-file"
@@ -64,7 +67,8 @@ class UploadFile extends React.Component {
     this.isUploading = true;
     this.completed = 0;
 
-    const fileRef = storage.ref("menus").child("menu.jpg");
+    const filename = utils.getWeekNumber().join("-");
+    const fileRef = storage.ref("menus").child(filename);
     const uploadTask = fileRef.put(this.file);
     uploadTask.on("state_changed", this.handleUploadProgress);
   };
