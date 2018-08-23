@@ -1,7 +1,7 @@
 import * as React from "react";
 import "./App.css";
 
-import UploadFile from "../UploadFile/UploadFile";
+import Landing from "../Landing/Landing";
 import logo from "./logo.svg";
 
 class App extends React.Component {
@@ -12,7 +12,7 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
         </header>
         <div>
-          <UploadFile />
+          <Landing />
         </div>
       </div>
     );
