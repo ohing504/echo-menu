@@ -1,4 +1,5 @@
 import { UploadTaskSnapshot } from "@firebase/storage-types";
+import * as loadImage from "blueimp-load-image";
 import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
@@ -54,7 +55,17 @@ class UploadFile extends React.Component {
     if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
       this.revoke();
-      this.preview = URL.createObjectURL(this.file);
+      loadImage.parseMetaData(this.file, data => {
+        if (data.exif && data.exif.get("Orientation")) {
+          loadImage(
+            this.file,
+            canvas => (this.preview = canvas.toDataURL(this.file.type)),
+            { orientation: data.exif.get("Orientation") }
+          );
+        } else {
+          this.preview = URL.createObjectURL(this.file);
+        }
+      });
     }
   };
 
