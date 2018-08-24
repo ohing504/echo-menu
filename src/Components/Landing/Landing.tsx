@@ -5,7 +5,7 @@ import * as React from "react";
 import { storage } from "../../shared/firebase/firebase";
 import * as utils from "../../shared/utils";
 import MenuImageCard from "../Menu/MenuImageCard";
-import UploadFile from "../UploadFile/UploadFile";
+import UploadFilePage from "../UploadFile/UploadFile";
 
 @observer
 class Landing extends React.Component {
@@ -27,7 +27,7 @@ class Landing extends React.Component {
         {!this.isLoading && this.imageURL ? (
           <MenuImageCard imageURL={this.imageURL} />
         ) : !this.isLoading ? (
-          <UploadFile />
+          <UploadFilePage />
         ) : (
           undefined
         )}

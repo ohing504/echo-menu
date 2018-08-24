@@ -4,14 +4,18 @@ import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 
+import { Progress } from "reactstrap";
+import "./UploadFile.css";
+
 import { storage } from "../../shared/firebase/firebase";
 import * as utils from "../../shared/utils";
-import PreviewCard from "./PreviewCard";
+import NoUploadFileCard from "./NoUploadFileCard/NoUploadFileCard";
+import UploadFilePreview from "./UploadFilePreviewCard/UploadFilePreviewCard";
 
 @observer
-class UploadFile extends React.Component {
+class UploadFilePage extends React.Component {
   @observable
-  private file: any;
+  private file: File;
 
   @observable
   private preview: string;
@@ -25,24 +29,37 @@ class UploadFile extends React.Component {
   public render() {
     return (
       <div>
-        <h3>데이터가 없습니다...</h3>
-
-        <input
-          accept="image/*"
-          id="flat-button-file"
-          type="file"
-          onChange={this.handleFiles}
-        />
-
-        {this.file && (
-          <PreviewCard
-            preview={this.preview}
-            file={this.file}
-            onSubmit={this.handleUpload}
+        {this.isUploading && (
+          <Progress
+            style={{
+              borderRadius: 0,
+              position: "fixed",
+              top: 0,
+              width: "100%",
+              zIndex: 999
+            }}
+            value={this.completed}
           />
         )}
 
-        {this.isUploading && <p>{this.completed} %</p>}
+        <input
+          accept="image/*"
+          className="input-file"
+          id="file-browser"
+          multiple={false}
+          type="file"
+          onChange={this.handleFile}
+        />
+
+        {this.file ? (
+          <UploadFilePreview
+            file={this.file}
+            preview={this.preview}
+            handleUpload={this.handleUpload}
+          />
+        ) : (
+          <NoUploadFileCard />
+        )}
       </div>
     );
   }
@@ -51,7 +68,7 @@ class UploadFile extends React.Component {
   private revoke = () => URL.revokeObjectURL(this.preview);
 
   @action
-  private handleFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+  private handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
       this.revoke();
@@ -98,4 +115,4 @@ class UploadFile extends React.Component {
   };
 }
 
-export default UploadFile;
+export default UploadFilePage;

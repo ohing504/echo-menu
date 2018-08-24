@@ -1,4 +1,6 @@
 import * as React from "react";
+
+import { Nav, Navbar, NavItem } from "reactstrap";
 import "./App.css";
 
 import Landing from "../Landing/Landing";
@@ -8,9 +10,14 @@ class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
+        <Navbar className="App-Navbar">
+          <Nav>
+            <NavItem>
+              <img src={logo} className="App-logo" alt="logo" />
+            </NavItem>
+          </Nav>
+        </Navbar>
+
         <div>
           <Landing />
         </div>
