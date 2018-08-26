@@ -1,22 +1,34 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import "./App.css";
-
 import * as routes from "../../constants/routes";
 import Landing from "../Landing/Landing";
+import UploadImage from "../UploadImage/UploadImage";
 import Header from "./Header/Header";
+
+const styles = {
+  app: {},
+  header: {
+    backgroundColor: "#ff9800",
+    display: "flex",
+    height: "56px",
+    justifyContent: "center"
+  },
+  main: { display: "flex", justifyContent: "center", margin: "10px" }
+};
 
 const App = () => (
   <Router>
-    <div className="App">
-      <div className="App-header">
+    <div style={styles.app}>
+      <div style={styles.header}>
         <Header />
       </div>
 
-      <main>
+      <main style={styles.main}>
         <Switch>
           <Route exact={true} path={routes.LANDING} component={Landing} />
+          <Route exact={true} path={routes.UPLOAD} component={UploadImage} />
+          <Route component={Landing} />
         </Switch>
       </main>
     </div>

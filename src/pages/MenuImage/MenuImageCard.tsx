@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { Card, CardBody, CardImg, CardTitle } from "reactstrap";
 
 const options = {
@@ -9,15 +8,15 @@ const options = {
   year: "numeric"
 };
 
-const MenuCard = ({ imageURL }) => (
+const MenuImageCard = ({ imageURL }) => (
   <div>
-    <Card style={{ margin: "10px" }}>
+    <Card>
       <CardBody>
         <CardTitle>{new Date().toLocaleDateString("ko-KR", options)}</CardTitle>
       </CardBody>
-      <CardImg bottom={true} width="100%" src={imageURL} alt="" />
+      <CardImg bottom={true} width="100%" src={imageURL} />
     </Card>
   </div>
 );
 
-export default MenuCard;
+export default MenuImageCard;

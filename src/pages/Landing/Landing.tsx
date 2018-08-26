@@ -2,20 +2,24 @@ import { action, observable } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 
+import * as routes from "../../constants/routes";
 import { storage } from "../../shared/firebase/firebase";
 import * as utils from "../../shared/utils";
-import MenuImageCard from "../Menu/MenuImageCard";
-import UploadFilePage from "../UploadFile/UploadFile";
+import MenuImageCard from "../MenuImage/MenuImageCard";
+
+interface ILandingProps {
+  history?: any;
+}
 
 @observer
-class Landing extends React.Component {
+class Landing extends React.Component<ILandingProps> {
   @observable
-  private imageURL: string | undefined;
+  private imageURL: string;
 
   @observable
   private isLoading: boolean;
 
-  constructor(props: any) {
+  constructor(props: ILandingProps) {
     super(props);
     this.fetchMenu();
   }
@@ -23,13 +27,10 @@ class Landing extends React.Component {
   public render() {
     return (
       <div>
-        {this.isLoading && <p>Loading...</p>}
-        {!this.isLoading && this.imageURL ? (
-          <MenuImageCard imageURL={this.imageURL} />
-        ) : !this.isLoading ? (
-          <UploadFilePage />
+        {this.isLoading ? (
+          <p>Loading...</p>
         ) : (
-          undefined
+          <MenuImageCard imageURL={this.imageURL} />
         )}
       </div>
     );
@@ -38,19 +39,17 @@ class Landing extends React.Component {
   @action
   private fetchMenu = () => {
     this.isLoading = true;
-    this.imageURL = undefined;
     const filename = utils.getWeekNumber().join("-");
-    const fileRef = storage.ref("menus").child(filename);
-    fileRef
+
+    storage
+      .ref("menus")
+      .child(filename)
       .getDownloadURL()
       .then((url: string) => {
         this.imageURL = url;
         this.isLoading = false;
       })
-      .catch((error: Error) => {
-        this.imageURL = undefined;
-        this.isLoading = false;
-      });
+      .catch((error: Error) => this.props.history.push(routes.UPLOAD));
   };
 }
 

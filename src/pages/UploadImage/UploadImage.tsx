@@ -5,15 +5,33 @@ import { observer } from "mobx-react";
 import * as React from "react";
 
 import { Progress } from "reactstrap";
-import "./UploadFile.css";
 
+import * as routes from "../../constants/routes";
 import { storage } from "../../shared/firebase/firebase";
 import * as utils from "../../shared/utils";
-import NoUploadFileCard from "./NoUploadFileCard/NoUploadFileCard";
-import UploadFilePreview from "./UploadFilePreviewCard/UploadFilePreviewCard";
+import ImagePreviewCard from "./ImagePreviewCard/ImagePreviewCard";
+import NoImageCard from "./NoImageCard/NoImageCard";
+
+const styles = {
+  fileInput: {
+    display: "none"
+  },
+  progress: {
+    borderRadius: 0,
+    left: 0,
+    position: "fixed" as "fixed",
+    top: 0,
+    width: "100%",
+    zIndex: 999
+  }
+};
+
+interface IUploadImageProps {
+  history?: any;
+}
 
 @observer
-class UploadFilePage extends React.Component {
+class UploadImage extends React.Component<IUploadImageProps> {
   @observable
   private file: File;
 
@@ -21,7 +39,7 @@ class UploadFilePage extends React.Component {
   private preview: string;
 
   @observable
-  private completed: number = 0;
+  private completed: number;
 
   @observable
   private isUploading: boolean = false;
@@ -30,35 +48,26 @@ class UploadFilePage extends React.Component {
     return (
       <div>
         {this.isUploading && (
-          <Progress
-            style={{
-              borderRadius: 0,
-              position: "fixed",
-              top: 0,
-              width: "100%",
-              zIndex: 999
-            }}
-            value={this.completed}
-          />
+          <Progress style={styles.progress} value={this.completed} />
         )}
 
         <input
           accept="image/*"
-          className="input-file"
           id="file-browser"
-          multiple={false}
           type="file"
+          multiple={false}
+          style={styles.fileInput}
           onChange={this.handleFile}
         />
 
         {this.file ? (
-          <UploadFilePreview
+          <ImagePreviewCard
             file={this.file}
             preview={this.preview}
             handleUpload={this.handleUpload}
           />
         ) : (
-          <NoUploadFileCard />
+          <NoImageCard />
         )}
       </div>
     );
@@ -72,33 +81,28 @@ class UploadFilePage extends React.Component {
     if (event.target.files && event.target.files[0]) {
       this.file = event.target.files[0];
       this.revoke();
+
       loadImage.parseMetaData(this.file, data => {
-        if (data.exif && data.exif.get("Orientation")) {
-          loadImage(
-            this.file,
-            canvas => (this.preview = canvas.toDataURL(this.file.type)),
-            { orientation: data.exif.get("Orientation") }
-          );
-        } else {
-          this.preview = URL.createObjectURL(this.file);
-        }
+        loadImage(
+          this.file,
+          canvas => (this.preview = canvas.toDataURL(this.file.type)),
+          { canvas: true, orientation: data.exif.get("Orientation") }
+        );
       });
     }
   };
 
   @action
   private handleUpload = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (!this.file) {
-      return;
+    if (this.file) {
+      this.isUploading = true;
+      this.completed = 0;
+
+      const filename = utils.getWeekNumber().join("-");
+      const fileRef = storage.ref("menus").child(filename);
+      const uploadTask = fileRef.putString(this.preview, "data_url");
+      uploadTask.on("state_changed", this.handleUploadProgress);
     }
-
-    this.isUploading = true;
-    this.completed = 0;
-
-    const filename = utils.getWeekNumber().join("-");
-    const fileRef = storage.ref("menus").child(filename);
-    const uploadTask = fileRef.put(this.file);
-    uploadTask.on("state_changed", this.handleUploadProgress);
   };
 
   @action
@@ -112,7 +116,8 @@ class UploadFilePage extends React.Component {
   @action
   private handleUploadCompleted = () => {
     this.isUploading = false;
+    this.props.history.push(routes.LANDING);
   };
 }
 
-export default UploadFilePage;
+export default UploadImage;
