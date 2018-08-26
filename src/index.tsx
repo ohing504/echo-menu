@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import App from "./Components/App/App";
+import App from "./pages/App/App";
 import registerServiceWorker from "./registerServiceWorker";
 
 import "bootstrap/dist/css/bootstrap.min.css";
