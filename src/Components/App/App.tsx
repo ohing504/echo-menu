@@ -1,29 +1,26 @@
 import * as React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { Nav, Navbar, NavItem } from "reactstrap";
 import "./App.css";
 
+import * as routes from "../../constants/routes";
 import Landing from "../Landing/Landing";
-import logo from "./logo.svg";
+import Header from "./Header/Header";
 
-class App extends React.Component {
-  public render() {
-    return (
-      <div className="App">
-        <Navbar className="App-Navbar">
-          <Nav>
-            <NavItem>
-              <img src={logo} className="App-logo" alt="logo" />
-            </NavItem>
-          </Nav>
-        </Navbar>
-
-        <div>
-          <Landing />
-        </div>
+const App = () => (
+  <Router>
+    <div className="App">
+      <div className="App-header">
+        <Header />
       </div>
-    );
-  }
-}
+
+      <main>
+        <Switch>
+          <Route exact={true} path={routes.LANDING} component={Landing} />
+        </Switch>
+      </main>
+    </div>
+  </Router>
+);
 
 export default App;

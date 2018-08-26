@@ -6,16 +6,6 @@
   height: 30px;
 }
 
-.App-Navbar {
-  background-color: #ff9800;
-}
-
 .App-header {
-  background-color: #eb7e17;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100px;
-  padding: 20px;
-  color: white;
+  background-color: #ff9800;
 }
