@@ -1,56 +1,25 @@
-import { action, observable } from "mobx";
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { compose } from "recompose";
 
-import * as routes from "../../constants/routes";
-import { storage } from "../../shared/firebase/firebase";
-import * as utils from "../../shared/utils";
 import MenuImageCard from "../MenuImage/MenuImageCard";
+import UploadImage from "../UploadImage/UploadImage";
 
-interface ILandingProps {
-  history?: any;
-}
+const Landing = ({ menuStore }) => (
+  <div>
+    {menuStore.isLoading ? (
+      <p>Loading...</p>
+    ) : !menuStore.isLoading && menuStore.isExist ? (
+      <MenuImageCard menuStore={menuStore} />
+    ) : !menuStore.isLoading && !menuStore.isExist ? (
+      <UploadImage />
+    ) : (
+      undefined
+    )}
+  </div>
+);
 
-@observer
-class Landing extends React.Component<ILandingProps> {
-  @observable
-  private imageURL: string;
-
-  @observable
-  private isLoading: boolean;
-
-  constructor(props: ILandingProps) {
-    super(props);
-    this.fetchMenu();
-  }
-
-  public render() {
-    return (
-      <div>
-        {this.isLoading ? (
-          <p>Loading...</p>
-        ) : (
-          <MenuImageCard imageURL={this.imageURL} />
-        )}
-      </div>
-    );
-  }
-
-  @action
-  private fetchMenu = () => {
-    this.isLoading = true;
-    const filename = utils.getWeekNumber().join("-");
-
-    storage
-      .ref("menus")
-      .child(filename)
-      .getDownloadURL()
-      .then((url: string) => {
-        this.imageURL = url;
-        this.isLoading = false;
-      })
-      .catch((error: Error) => this.props.history.push(routes.UPLOAD));
-  };
-}
-
-export default Landing;
+export default compose(
+  inject("menuStore"),
+  observer
+)(Landing);

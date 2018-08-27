@@ -8,13 +8,13 @@ const options = {
   year: "numeric"
 };
 
-const MenuImageCard = ({ imageURL }) => (
+const MenuImageCard = ({ menuStore }) => (
   <div>
     <Card>
       <CardBody>
         <CardTitle>{new Date().toLocaleDateString("ko-KR", options)}</CardTitle>
       </CardBody>
-      <CardImg bottom={true} width="100%" src={imageURL} />
+      <CardImg bottom={true} width="100%" src={menuStore.imageURL} />
     </Card>
   </div>
 );

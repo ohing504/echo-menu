@@ -1,7 +1,7 @@
 import { UploadTaskSnapshot } from "@firebase/storage-types";
 import * as loadImage from "blueimp-load-image";
 import { action, observable } from "mobx";
-import { observer } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import * as React from "react";
 
 import { Progress } from "reactstrap";
@@ -9,6 +9,7 @@ import { Progress } from "reactstrap";
 import * as routes from "../../constants/routes";
 import { storage } from "../../shared/firebase/firebase";
 import * as utils from "../../shared/utils";
+import { IMenuStore } from "../../stores/types";
 import ImagePreviewCard from "./ImagePreviewCard/ImagePreviewCard";
 import NoImageCard from "./NoImageCard/NoImageCard";
 
@@ -28,8 +29,10 @@ const styles = {
 
 interface IUploadImageProps {
   history?: any;
+  menuStore?: IMenuStore;
 }
 
+@inject("menuStore")
 @observer
 class UploadImage extends React.Component<IUploadImageProps> {
   @observable
