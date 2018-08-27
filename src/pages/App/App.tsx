@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import * as routes from "../../constants/routes";
@@ -20,6 +21,10 @@ const styles = {
 const App = () => (
   <Router>
     <div style={styles.app}>
+      <Helmet>
+        <title>Echo Menu</title>
+      </Helmet>
+
       <div style={styles.header}>
         <Header />
       </div>
