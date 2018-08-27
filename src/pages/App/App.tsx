@@ -7,6 +7,8 @@ import Landing from "../Landing/Landing";
 import UploadImage from "../UploadImage/UploadImage";
 import Header from "./Header/Header";
 
+import logo from "../../logo.jpg";
+
 const styles = {
   app: {},
   header: {
@@ -22,6 +24,18 @@ const App = () => (
   <Router>
     <div style={styles.app}>
       <Helmet>
+        <meta property="og:title" content="Echo Menu" />
+        <meta property="og:description" content="주간 메뉴표 보기" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={logo} />
+        <meta
+          property="og:image:secure_url"
+          content={"https://echo-menu.firebaseapp.com" + logo}
+        />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="532px" />
+        <meta property="og:image:height" content="305px" />
+        <meta property="og:url" content="https://echo-menu.firebaseapp.com/" />
         <title>Echo Menu</title>
       </Helmet>
 
