@@ -22,7 +22,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "deploy": "react-scripts-ts build && cp .env.local build/.env && firebase deploy"
   },
   "devDependencies": {
     "@firebase/storage-types": "^0.2.3",
