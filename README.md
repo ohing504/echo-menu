@@ -1,3 +1,11 @@
+# Echo Menu
+
+[![Build Status](https://travis-ci.org/ohing504/echo-menu.svg?branch=master)](https://travis-ci.org/ohing504/echo-menu)
+
+이 프로젝트는 [Create React App TypeScript](https://github.com/wmonk/create-react-app-typescript)를 이용하여 생성한 프로젝트로, React와 MobX, TypeScript, Firebase Storage를 이용하여 주간 식단표 사진을 업로드하고 보여주는 서비스입니다.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
