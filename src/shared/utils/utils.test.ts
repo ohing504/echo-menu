@@ -1,7 +1,8 @@
-import { getWeekNumber, getWeekNumberOfYear } from "./date";
-import { humanFileSize } from "./human";
+import { getWeekNumber, getWeekNumberOfYear } from "./index";
+import { humanFileSize } from "./index";
 
 it("returns file size in human readable", () => {
+  expect(humanFileSize(0)).toBe("0 Bytes");
   expect(humanFileSize(0, true)).toBe("0 Bytes");
   expect(humanFileSize(0, false)).toBe("0 Bytes");
 
@@ -16,6 +17,7 @@ it("returns file size in human readable", () => {
 });
 
 it("returns week number with year", () => {
+  expect(getWeekNumber()).toHaveLength(2);
   expect(getWeekNumber(new Date(2017, 7, 26))).toEqual([2017, 34]);
   expect(getWeekNumber(new Date(2017, 7, 27))).toEqual([2017, 35]);
   expect(getWeekNumber(new Date(2018, 7, 18))).toEqual([2018, 33]);
@@ -23,6 +25,7 @@ it("returns week number with year", () => {
 });
 
 it("returns week number of year", () => {
+  expect(getWeekNumberOfYear()).toBeGreaterThan(0);
   expect(getWeekNumberOfYear(new Date(2017, 7, 26))).toEqual(34);
   expect(getWeekNumberOfYear(new Date(2017, 7, 27))).toEqual(35);
   expect(getWeekNumberOfYear(new Date(2018, 7, 18))).toEqual(33);
