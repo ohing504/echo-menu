@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - node_modules
+script:
+  - npm install
+# how to test with firebase mock?
+#  - npm test
+  - npm run build
