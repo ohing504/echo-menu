@@ -88,8 +88,13 @@ class UploadImage extends React.Component<IUploadImageProps> {
       loadImage.parseMetaData(this.file, data => {
         loadImage(
           this.file,
-          canvas => (this.preview = canvas.toDataURL(this.file.type)),
-          { canvas: true, orientation: data.exif.get("Orientation") }
+          action(
+            (canvas: any) => (this.preview = canvas.toDataURL(this.file.type))
+          ),
+          {
+            canvas: true,
+            orientation: data.exif ? data.exif.get("Orientation") : null
+          }
         );
       });
     }
