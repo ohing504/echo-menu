@@ -3,6 +3,7 @@ import * as loadImage from "blueimp-load-image";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import * as React from "react";
+import { withRouter } from "react-router-dom";
 
 import { Progress } from "reactstrap";
 
@@ -33,6 +34,7 @@ interface IUploadImageProps {
 }
 
 @inject("menuStore")
+@withRouter
 @observer
 class UploadImage extends React.Component<IUploadImageProps> {
   @observable
