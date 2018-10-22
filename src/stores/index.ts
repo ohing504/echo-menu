@@ -1,7 +1,7 @@
 import { configure } from "mobx";
 import MenuStore from "./menuStore";
 
-configure({ enforceActions: true });
+configure({ enforceActions: "observed" });
 
 class RootStore {
   public menuStore;
